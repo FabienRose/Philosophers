@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   actions.c                                          :+:      :+:    :+:   */
+/*   set.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 12:22:06 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/14 12:22:06 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/03/17 10:30:00 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/03/17 10:31:08 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 
 long	get_time(void)
 {
@@ -22,6 +21,7 @@ long	get_time(void)
 	time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	return (time);
 }
+
 void	set_forks(t_data *data)
 {
 	int	i;
@@ -40,7 +40,7 @@ void	set_philo(t_philo **philo, t_data *data)
 	{
 		(*philo)[i].id = i + 1;
 		(*philo)[i].data = data;
-		(*philo)[i].last_meal = 0;
+		(*philo)[i].last_meal = get_time();
 		(*philo)[i].meals_eaten = 0;
 		(*philo)[i].is_dead = 0;
 		(*philo)[i].left_fork = &data->forks[i];
@@ -49,7 +49,14 @@ void	set_philo(t_philo **philo, t_data *data)
 	}
 }
 
-void	set_all(t_philo **philo, t_data *data, char **argv)
+void	set_monitor(t_monitor *monitor, t_philo **philo, t_data *data)
+{
+	monitor->philo = *philo;
+	monitor->data = data;
+	monitor->mutex = &data->print_mutex;
+}
+
+void	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
 {
 	data->nb_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
@@ -72,6 +79,7 @@ void	set_all(t_philo **philo, t_data *data, char **argv)
 		return ;
 	}
 	set_philo(philo, data);
+	set_monitor(monitor, philo, data);
 	data->start_time = get_time();
 	data->someone_died = 0;
 }

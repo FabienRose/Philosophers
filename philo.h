@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 12:22:35 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/14 12:35:54 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/03/17 10:26:16 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/03/17 10:26:16 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/time.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/time.h>
+
+# define TRUE 1
+# define FALSE 0
 
 typedef struct s_data
 {
@@ -45,10 +48,21 @@ typedef struct s_philo
 	int				is_dead;
 }	t_philo;
 
+typedef struct s_monitor
+{
+	pthread_t		thread;
+	pthread_mutex_t	*mutex;
+	t_philo			*philo;
+	t_data			*data;
+}	t_monitor;
 
-void	set_all(t_philo **philo, t_data *data, char **argv);
+void	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv);
 int		ft_atoi(const char *str);
 void	cleanup(t_philo *philo);
-void	*philo_eat(void *arg);
+void	*philo_cycle(void *arg);
 long	get_time(void);
+void	philo_pick_forks(t_philo *philo);
+void	philo_eat(t_philo *philo);
+void	philo_sleep(t_philo *philo);
+void	*monitor_cycle(void *arg);
 #endif
