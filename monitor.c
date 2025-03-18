@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 10:51:02 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/17 10:58:41 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/03/18 13:30:47 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/03/18 13:31:15 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*monitor_cycle(void *arg)
 			if (get_time() - monitor->philo[i].last_meal > monitor->data->time_to_die)
 			{
 				pthread_mutex_lock(&monitor->data->print_mutex);
-				printf("At %ld, philo %d is dead\n", get_time() - monitor->data->start_time, monitor->philo[i].id);
+				printf("%ld %d died\n", get_time() - monitor->data->start_time, monitor->philo[i].id);
 				printf("DEBUG : %ld\n", (monitor->philo[i].last_meal - get_time()));
 				pthread_mutex_destroy(&monitor->data->print_mutex);
 				return (NULL);
