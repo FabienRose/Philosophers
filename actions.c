@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 13:32:12 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/18 15:51:06 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/03/18 17:30:04 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/03/18 17:30:22 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,57 @@
 void	*philo_cycle(void *arg)
 {
 	t_philo			*philo;
+	int				thinking_time;
 
 	philo = (t_philo *)arg;
+	/* Initial desynchronization based on philosopher ID */
+	if (philo->id % 2 == 0)
+		usleep(philo->data->time_to_eat / 3 * 1000);
+	else if (philo->data->nb_philo % 2 == 1)
+		usleep(philo->data->time_to_eat / 2 * 1000);
 	while (TRUE)
 	{
+		/* Check if we should end the simulation */
+		pthread_mutex_lock(&philo->data->death_mutex);
+		if (philo->data->someone_died)
+		{
+			pthread_mutex_unlock(&philo->data->death_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->data->death_mutex);
+		
+		/* Check if this philosopher has eaten enough */
+		if (philo->data->nb_eat != -1 && philo->meals_eaten >= philo->data->nb_eat)
+		{
+			break ;
+		}
+		
 		philo_pick_forks(philo);
 		philo_eat(philo);
 		philo_sleep(philo);
+		/* Print thinking status */
 		pthread_mutex_lock(&philo->data->print_mutex);
 		printf("%ld %d is thinking\n",
 			get_time() - philo->data->start_time, philo->id);
 		pthread_mutex_unlock(&philo->data->print_mutex);
+		/* Calculate a fair thinking time based on time_to_die */
+		thinking_time = philo->data->time_to_die / 5;
+		/* Adjust thinking time based on philosopher's position and state */
+		if (philo->data->nb_philo % 2 == 1)
+		{
+			if (philo->id == 1)
+				thinking_time = philo->data->time_to_eat / 2;
+			else if (philo->id % 2 == 0)
+				thinking_time = thinking_time / 2;
+			else
+				thinking_time = thinking_time * 2 / 3;
+		}
+		/* Limit thinking time to prevent starvation */
+		if (thinking_time > philo->data->time_to_die / 3)
+			thinking_time = philo->data->time_to_die / 3;
+		/* Apply thinking time */
+		usleep(thinking_time * 1000);
 	}
-
 	return (NULL);
 }
 

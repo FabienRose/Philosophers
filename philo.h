@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   set.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 13:30:10 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/18 13:30:10 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/03/19 10:25:24 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/03/19 10:25:24 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,16 @@ typedef struct s_philo
 	t_data			*data;
 	long			last_meal;
 	int				meals_eaten;
-	int				is_dead;
 }	t_philo;
 
 typedef struct s_monitor
 {
 	pthread_t		thread;
-	pthread_mutex_t	*mutex;
 	t_philo			*philo;
 	t_data			*data;
 }	t_monitor;
 
-void	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv);
+int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv);
 int		ft_atoi(const char *str);
 void	cleanup(t_philo *philo);
 void	*philo_cycle(void *arg);

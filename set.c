@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                              :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 10:30:00 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/17 10:31:08 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/03/19 10:24:45 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/03/19 10:24:45 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	set_philo(t_philo **philo, t_data *data)
 		(*philo)[i].data = data;
 		(*philo)[i].last_meal = get_time();
 		(*philo)[i].meals_eaten = 0;
-		(*philo)[i].is_dead = 0;
 		(*philo)[i].left_fork = &data->forks[i];
 		(*philo)[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
 		i++;
@@ -53,10 +52,9 @@ void	set_monitor(t_monitor *monitor, t_philo **philo, t_data *data)
 {
 	monitor->philo = *philo;
 	monitor->data = data;
-	monitor->mutex = &data->print_mutex;
 }
 
-void	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
+int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
 {
 	data->nb_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
@@ -68,7 +66,7 @@ void	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
 		data->nb_eat = -1;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
 	if (!data->forks)
-		return ;
+		return (TRUE);
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
 	set_forks(data);
@@ -76,10 +74,11 @@ void	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
 	if (!*philo)
 	{
 		free(data->forks);
-		return ;
+		return (TRUE);
 	}
 	set_philo(philo, data);
 	set_monitor(monitor, philo, data);
 	data->start_time = get_time();
 	data->someone_died = 0;
+	return (FALSE);
 }
