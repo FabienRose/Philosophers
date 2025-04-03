@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 10:24:41 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/03 12:09:03 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/03 15:50:04 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/03 15:52:11 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ void	destroy_mutexes(t_philo *philo)
 	destroy_forks(philo);
 }
 
-void	cleanup(t_philo *philo)
+int	cleanup(t_philo *philo)
 {
 	destroy_mutexes(philo);
 	free(philo);
+	return (0);
 }

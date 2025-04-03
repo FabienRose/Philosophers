@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   monitor.c                                          :+:      :+:    :+:   */
+/*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 12:09:35 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/03 12:10:16 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/03 17:05:55 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/03 17:05:55 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	*monitor_cycle(void *arg)
 			pthread_mutex_lock(&monitor->data->print_mutex);
 			printf("All philosophers have eaten enough times!\n");
 			pthread_mutex_unlock(&monitor->data->print_mutex);
-			return (NULL);
+			break;
 		}
 		i = 0;
 		while (i < monitor->data->nb_philo)
@@ -67,10 +67,14 @@ void	*monitor_cycle(void *arg)
 				printf("%ld %d died\n", get_time() - monitor->data->start_time,
 					monitor->philo[i].id);
 				pthread_mutex_unlock(&monitor->data->print_mutex);
-				return (NULL);
+				break;
 			}
 			i++;
 		}
+		if (monitor->data->someone_died)
+			break;
 		usleep(1000);
 	}
+	cleanup(monitor->philo);
+	return (NULL);
 }

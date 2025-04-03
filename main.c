@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   monitor.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 12:27:29 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/03 12:27:29 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/03 15:36:59 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/03 15:36:59 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,9 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < data.nb_philo)
 	{
-		pthread_detach(philo[i].thread);
+		pthread_join(philo[i].thread, NULL);
 		i++;
 	}
 	pthread_join(monitor.thread, NULL);
-	cleanup(philo);
 	return (0);
 }

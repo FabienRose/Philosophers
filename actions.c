@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   actions.c                                          :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 11:52:38 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/03 11:53:43 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/03 17:05:52 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/03 17:05:52 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	*philo_cycle(void *arg)
 	{
 		if (stop_check(philo))
 			break ;
-		philo_pick_forks(philo);
+		if (!philo_pick_forks(philo))
+			return (NULL);
+		if (stop_check(philo))
+			break ;
 		philo_eat(philo);
 		if (stop_check(philo))
 			break ;
@@ -53,7 +56,7 @@ void	*philo_cycle(void *arg)
 		printf("%ld %d is thinking\n",
 			get_time() - philo->data->start_time, philo->id);
 		pthread_mutex_unlock(&philo->data->print_mutex);
-		thinking_time = philo->data->time_to_die / 5;
+		thinking_time = 0;
 		if (philo->data->nb_philo % 2 == 1)
 		{
 			if (philo->id == 1)
@@ -67,11 +70,10 @@ void	*philo_cycle(void *arg)
 			thinking_time = philo->data->time_to_die / 3;
 		usleep(thinking_time * 1000);
 	}
-	printf("philo %d FINISHED EATING\n", philo->id);
 	return (NULL);
 }
 
-void	philo_pick_forks(t_philo *philo)
+int	philo_pick_forks(t_philo *philo)
 {
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
@@ -91,11 +93,14 @@ void	philo_pick_forks(t_philo *philo)
 	printf("%ld %d has taken a fork\n",
 		get_time() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(&philo->data->print_mutex);
+	if (philo->data->nb_philo < 2)
+		return (FALSE);
 	pthread_mutex_lock(second_fork);
 	pthread_mutex_lock(&philo->data->print_mutex);
 	printf("%ld %d has taken a fork\n",
 		get_time() - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(&philo->data->print_mutex);
+	return (TRUE);
 }
 
 void	philo_eat(t_philo *philo)
