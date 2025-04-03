@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                              :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 10:25:24 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/19 10:25:24 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/01 14:28:03 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/01 14:28:03 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	t_data			*data;
 	long			last_meal;
 	int				meals_eaten;
+	int				is_full;
 }	t_philo;
 
 typedef struct s_monitor

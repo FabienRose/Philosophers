@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 09:23:40 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/03/19 09:30:04 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/03 12:09:35 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/03 12:10:16 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_all_full(t_monitor *monitor)
 	all_full = 1;
 	while (i < monitor->data->nb_philo)
 	{
-		if (monitor->philo[i].meals_eaten < monitor->data->nb_eat)
+		if (monitor->philo[i].is_full == 0)
 		{
 			all_full = 0;
 			break ;
@@ -56,14 +56,15 @@ void	*monitor_cycle(void *arg)
 		while (i < monitor->data->nb_philo)
 		{
 			current_time = get_time();
-			if (current_time - monitor->philo[i].last_meal
-				> monitor->data->time_to_die)
+			if ((current_time - monitor->philo[i].last_meal
+					> monitor->data->time_to_die)
+				&& monitor->philo[i].is_full == 0)
 			{
 				pthread_mutex_lock(&monitor->data->death_mutex);
 				monitor->data->someone_died = 1;
 				pthread_mutex_unlock(&monitor->data->death_mutex);
 				pthread_mutex_lock(&monitor->data->print_mutex);
-				printf("%ld %d died\n", get_time() - monitor->data->start_time, 
+				printf("%ld %d died\n", get_time() - monitor->data->start_time,
 					monitor->philo[i].id);
 				pthread_mutex_unlock(&monitor->data->print_mutex);
 				return (NULL);
