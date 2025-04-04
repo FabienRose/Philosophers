@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 14:13:46 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/04 14:13:46 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/04 17:28:05 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/04 17:28:05 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ typedef struct s_monitor
 	t_data			*data;
 }	t_monitor;
 
-int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv);
+int		set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv);
 int		ft_atoi(const char *str);
-int	cleanup(t_philo *philo);
+int		cleanup(t_philo *philo);
 void	*philo_cycle(void *arg);
 long	get_time(void);
 int		philo_pick_forks(t_philo *philo);

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:36:59 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/03 15:36:59 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/04 17:11:14 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/04 17:25:48 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ int	main(int argc, char **argv)
 	pthread_create(&monitor.thread, NULL, monitor_cycle, &monitor);
 	i = 0;
 	while (i < data.nb_philo)
-	{
-		pthread_join(philo[i].thread, NULL);
-		i++;
-	}
+		pthread_join(philo[i++].thread, NULL);
 	pthread_join(monitor.thread, NULL);
 	return (0);
 }
