@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:57:43 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/03 15:57:43 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/04 14:13:46 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/04 14:13:46 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_philo
 	long			last_meal;
 	int				meals_eaten;
 	int				is_full;
+	int				end;
 }	t_philo;
 
 typedef struct s_monitor

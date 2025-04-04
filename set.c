@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/01 14:27:28 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/01 14:27:49 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/04 14:13:59 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/04 14:13:59 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	set_philo(t_philo **philo, t_data *data)
 		(*philo)[i].last_meal = get_time();
 		(*philo)[i].meals_eaten = 0;
 		(*philo)[i].is_full = FALSE;
+		(*philo)[i].end = FALSE;
 		(*philo)[i].left_fork = &data->forks[i];
 		(*philo)[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
 		i++;
