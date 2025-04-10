@@ -5,36 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 16:43:37 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/04 16:56:18 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/09 10:11:27 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/09 10:13:23 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	stop_check(t_philo *philo)
-{
-	int	status;
-
-	status = FALSE;
-	if (philo->data->nb_eat != -1 && (philo->meals_eaten >= philo->data->nb_eat))
-	{
-		philo->is_full = TRUE;
-		status = TRUE;
-	}
-	pthread_mutex_lock(&philo->data->print_mutex);
-	pthread_mutex_lock(&philo->data->death_mutex);
-	if (philo->data->someone_died)
-		status = TRUE;
-	pthread_mutex_unlock(&philo->data->death_mutex);
-	pthread_mutex_unlock(&philo->data->print_mutex);
-	return (status);
-}
-
 void	*philo_cycle(void *arg)
 {
 	t_philo			*philo;
-	int				thinking_time;
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
@@ -59,25 +39,7 @@ void	*philo_cycle(void *arg)
 		philo_sleep(philo);
 		if (stop_check(philo))
 			break ;
-		pthread_mutex_lock(&philo->data->print_mutex);
-		printf("\033[1;35m%ld %d\033[0m \033[34mis thinking\033[0m\n",
-			get_time() - philo->data->start_time, philo->id);
-		pthread_mutex_unlock(&philo->data->print_mutex);
-		thinking_time = philo->data->time_to_die / 5;
-		if ((thinking_time + philo->data->time_to_eat + philo->data->time_to_sleep) >= philo->data->time_to_die)
-			thinking_time = (philo->data->time_to_die - philo->data->time_to_eat - philo->data->time_to_sleep)/2;
-		if (philo->data->nb_philo % 2 == 1)
-		{
-			if (philo->id == 1)
-				thinking_time = philo->data->time_to_eat / 2;
-			else if (philo->id % 2 == 0)
-				thinking_time = thinking_time / 2;
-			else
-				thinking_time = thinking_time * 2 / 3;
-		}
-		if (thinking_time > philo->data->time_to_die / 3)
-			thinking_time = philo->data->time_to_die / 3;
-		usleep(thinking_time * 1000);
+		philo_think(philo);
 	}
 	philo->end = TRUE;
 	return (NULL);
@@ -104,10 +66,7 @@ int	philo_pick_forks(t_philo *philo)
 		pthread_mutex_unlock(first_fork);
 		return (FALSE);
 	}
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("\033[1;35m%ld %d\033[0m \033[36mhas taken a fork\033[0m\n",
-		get_time() - philo->data->start_time, philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	print_philo_action(philo, "has taken a fork", "\033[36m");
 	if (philo->data->nb_philo < 2)
 		return (FALSE);
 	if (stop_check(philo))
@@ -116,10 +75,7 @@ int	philo_pick_forks(t_philo *philo)
 		return (FALSE);
 	}
 	pthread_mutex_lock(second_fork);
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("\033[1;35m%ld %d\033[0m \033[36mhas taken a fork\033[0m\n",
-		get_time() - philo->data->start_time, philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	print_philo_action(philo, "has taken a fork", "\033[36m");
 	return (TRUE);
 }
 
@@ -140,10 +96,7 @@ void	philo_eat(t_philo *philo)
 	}
 	philo->last_meal = get_time();
 	philo->meals_eaten++;
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("\033[1;35m%ld %d\033[0m \033[38;5;208mis eating\033[0m\n",
-		get_time() - philo->data->start_time, philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	print_philo_action(philo, "is eating", "\033[38;5;208m");
 	usleep(philo->data->time_to_eat * 1000);
 	pthread_mutex_unlock(second_fork);
 	pthread_mutex_unlock(first_fork);
@@ -151,9 +104,30 @@ void	philo_eat(t_philo *philo)
 
 void	philo_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("\033[1;35m%ld %d\033[0m \033[33mis sleeping\033[0m\n",
-		get_time() - philo->data->start_time, philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	print_philo_action(philo, "is sleeping", "\033[33m");
 	usleep(philo->data->time_to_sleep * 1000);
+}
+
+void	philo_think(t_philo *philo)
+{
+	int	thinking_time;
+
+	print_philo_action(philo, "is thinking", "\033[34m");
+	thinking_time = philo->data->time_to_die / 5;
+	if ((thinking_time + philo->data->time_to_eat + philo->data->time_to_sleep)
+		>= philo->data->time_to_die)
+		thinking_time = (philo->data->time_to_die - philo->data->time_to_eat
+				- philo->data->time_to_sleep) / 2;
+	if (philo->data->nb_philo % 2 == 1)
+	{
+		if (philo->id == 1)
+			thinking_time = philo->data->time_to_eat / 2;
+		else if (philo->id % 2 == 0)
+			thinking_time = thinking_time / 2;
+		else
+			thinking_time = thinking_time * 2 / 3;
+	}
+	if (thinking_time > philo->data->time_to_die / 3)
+		thinking_time = philo->data->time_to_die / 3;
+	usleep(thinking_time * 1000);
 }

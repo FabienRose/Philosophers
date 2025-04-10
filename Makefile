@@ -6,7 +6,7 @@
 #    By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:45:00 by fmixtur           #+#    #+#              #
-#    Updated: 2025/03/19 09:48:39 by fmixtur          ###   ########.fr        #
+#    Updated: 2025/04/09 10:06:59 by fmixtur          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ RM          = rm -f
 
 SRCS        = main.c \
               actions.c \
+              action_utils.c \
               monitor.c \
               set.c \
               utils.c \

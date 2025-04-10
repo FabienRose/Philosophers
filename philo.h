@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 17:28:05 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/04 17:28:05 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/09 10:11:14 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/09 10:11:14 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,16 @@ typedef struct s_monitor
 
 int		set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv);
 int		ft_atoi(const char *str);
+
 int		cleanup(t_philo *philo);
 void	*philo_cycle(void *arg);
+int		ft_strcmp(const char *s1, const char *s2);
 long	get_time(void);
 int		philo_pick_forks(t_philo *philo);
 void	philo_eat(t_philo *philo);
 void	philo_sleep(t_philo *philo);
+void	philo_think(t_philo *philo);
 void	*monitor_cycle(void *arg);
+int		stop_check(t_philo *philo);
+void	print_philo_action(t_philo *philo, char *status, char *color);
 #endif

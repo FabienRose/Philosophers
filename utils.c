@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 17:28:43 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/04 17:29:39 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/09 10:08:03 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/09 10:08:03 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,14 @@ int	ft_atoi(const char *str)
 	while (ft_isdigit(str[i]))
 		nb = nb * 10 + (str[i++]) - '0';
 	return (nb * minus);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
 }
