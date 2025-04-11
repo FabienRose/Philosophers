@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 10:11:14 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/09 10:11:14 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/11 02:11:20 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/11 02:11:20 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,10 @@ int		ft_strcmp(const char *s1, const char *s2);
 long	get_time(void);
 int		philo_pick_forks(t_philo *philo);
 void	philo_eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	philo_think(t_philo *philo);
+int		philo_sleep(t_philo *philo);
+int		philo_think(t_philo *philo);
 void	*monitor_cycle(void *arg);
 int		stop_check(t_philo *philo);
 void	print_philo_action(t_philo *philo, char *status, char *color);
+int		is_valid_number(char *str);
 #endif

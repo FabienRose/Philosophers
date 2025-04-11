@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 14:13:59 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/04 14:13:59 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/11 01:05:35 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/11 01:06:56 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ void	set_philo(t_philo **philo, t_data *data)
 	}
 }
 
-void	set_monitor(t_monitor *monitor, t_philo **philo, t_data *data)
+int	set_data(t_data *data, char **argv)
 {
-	monitor->philo = *philo;
-	monitor->data = data;
-}
-
-int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
-{
+	if (!is_valid_number(argv[1]) || !is_valid_number(argv[2])
+		|| !is_valid_number(argv[3]) || !is_valid_number(argv[4])
+		|| (argv[5] && !is_valid_number(argv[5])))
+	{
+		printf("Error: All arguments must be numeric\n");
+		return (FALSE);
+	}
 	data->nb_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
@@ -66,9 +67,16 @@ int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
 		data->nb_eat = ft_atoi(argv[5]);
 	else
 		data->nb_eat = -1;
+	return (TRUE);
+}
+
+int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
+{
+	if (!set_data(data, argv))
+		return (FALSE);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
 	if (!data->forks)
-		return (TRUE);
+		return (FALSE);
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
 	set_forks(data);
@@ -76,11 +84,12 @@ int	set_all(t_philo **philo, t_data *data, t_monitor *monitor, char **argv)
 	if (!*philo)
 	{
 		free(data->forks);
-		return (TRUE);
+		return (FALSE);
 	}
 	set_philo(philo, data);
-	set_monitor(monitor, philo, data);
+	monitor->philo = *philo;
+	monitor->data = data;
 	data->start_time = get_time();
 	data->someone_died = 0;
-	return (FALSE);
+	return (TRUE);
 }

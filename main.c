@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 17:11:14 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/04 17:25:48 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/11 00:17:13 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/11 00:17:18 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 		printf("Error: wrong number of arguments\n");
 		return (1);
 	}
-	if (set_all(&philo, &data, &monitor, argv) == TRUE)
+	if (!set_all(&philo, &data, &monitor, argv))
 		return (1);
 	i = 0;
 	while (i < data.nb_philo)

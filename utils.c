@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 10:08:03 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/09 10:08:03 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/11 01:04:35 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/11 01:05:07 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,22 @@
 int	ft_isdigit(int c)
 {
 	return (c >= '0' && c <= '9');
+}
+
+int	is_valid_number(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !str[i])
+		return (FALSE);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (ft_isdigit(str[i]))
+		i++;
+	if (str[i] != '\0')
+		return (FALSE);
+	return (TRUE);
 }
 
 int	ft_atoi(const char *str)

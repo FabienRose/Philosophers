@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 09/04/2025 10:00:47 by fmixtur           #+#    #+#             */
-/*   Updated: 09/04/2025 10:00:47 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/11 01:57:45 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/11 01:58:51 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	stop_check(t_philo *philo)
 void	print_philo_action(t_philo *philo, char *action, char *color)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
-	if (stop_check(philo) && ft_strcmp(action, "is eating") != 0)
+	if (stop_check(philo) && !philo->is_full)
 	{
 		pthread_mutex_unlock(&philo->data->print_mutex);
 		return ;

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmixtur <fmixtur@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 10:11:27 by fmixtur           #+#    #+#             */
-/*   Updated: 2025/04/09 10:13:23 by fmixtur          ###   ########.ch       */
+/*   Created: 2025/04/11 02:11:38 by fmixtur           #+#    #+#             */
+/*   Updated: 2025/04/11 02:11:38 by fmixtur          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	*philo_cycle(void *arg)
 		usleep(philo->data->time_to_eat / 2 * 1000);
 	while (TRUE)
 	{
-		if (stop_check(philo))
-			break ;
 		if (!philo_pick_forks(philo))
 			break ;
 		if (stop_check(philo))
@@ -34,12 +32,10 @@ void	*philo_cycle(void *arg)
 			break ;
 		}
 		philo_eat(philo);
-		if (stop_check(philo))
+		if (!philo_sleep(philo))
 			break ;
-		philo_sleep(philo);
-		if (stop_check(philo))
+		if (!philo_think(philo))
 			break ;
-		philo_think(philo);
 	}
 	philo->end = TRUE;
 	return (NULL);
@@ -61,19 +57,13 @@ int	philo_pick_forks(t_philo *philo)
 		second_fork = philo->left_fork;
 	}
 	pthread_mutex_lock(first_fork);
-	if (stop_check(philo))
-	{
-		pthread_mutex_unlock(first_fork);
+	if (stop_check(philo) && !pthread_mutex_unlock(first_fork))
 		return (FALSE);
-	}
 	print_philo_action(philo, "has taken a fork", "\033[36m");
 	if (philo->data->nb_philo < 2)
 		return (FALSE);
-	if (stop_check(philo))
-	{
-		pthread_mutex_unlock(first_fork);
+	if (stop_check(philo) && !pthread_mutex_unlock(first_fork))
 		return (FALSE);
-	}
 	pthread_mutex_lock(second_fork);
 	print_philo_action(philo, "has taken a fork", "\033[36m");
 	return (TRUE);
@@ -102,22 +92,25 @@ void	philo_eat(t_philo *philo)
 	pthread_mutex_unlock(first_fork);
 }
 
-void	philo_sleep(t_philo *philo)
+int	philo_sleep(t_philo *philo)
 {
+	if (stop_check(philo))
+		return (FALSE);
 	print_philo_action(philo, "is sleeping", "\033[33m");
 	usleep(philo->data->time_to_sleep * 1000);
+	return (TRUE);
 }
 
-void	philo_think(t_philo *philo)
+int	philo_think(t_philo *philo)
 {
 	int	thinking_time;
 
-	print_philo_action(philo, "is thinking", "\033[34m");
 	thinking_time = philo->data->time_to_die / 5;
 	if ((thinking_time + philo->data->time_to_eat + philo->data->time_to_sleep)
 		>= philo->data->time_to_die)
-		thinking_time = (philo->data->time_to_die - philo->data->time_to_eat
-				- philo->data->time_to_sleep) / 2;
+		thinking_time = 0;
+	else
+		print_philo_action(philo, "is thinking", "\033[34m");
 	if (philo->data->nb_philo % 2 == 1)
 	{
 		if (philo->id == 1)
@@ -130,4 +123,7 @@ void	philo_think(t_philo *philo)
 	if (thinking_time > philo->data->time_to_die / 3)
 		thinking_time = philo->data->time_to_die / 3;
 	usleep(thinking_time * 1000);
+	if (stop_check(philo))
+		return (FALSE);
+	return (TRUE);
 }
